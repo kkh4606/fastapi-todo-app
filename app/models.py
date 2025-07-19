@@ -17,6 +17,6 @@ class Todo(Base):
     todo = Column(String, nullable=False)
     is_completed = Column(Boolean, nullable=False, index=True)
     date_created = Column(DateTime(timezone=True), server_default=func.now())
-    user_id = Column(Integer, ForeignKey("users.id"))
+    owner_id = Column(Integer, ForeignKey("users.id"))
 
     user = relationship('User', back_populates='todos')

@@ -23,17 +23,25 @@ class AddTodo(BaseModel):
 
 class TodoOut(AddTodo):
     id : int
-    user_id: int
+    owner_id: int
     date_created : datetime
 
+    class Config:
+        orm_mode = True
+
+class UserTodoOut(AddTodo):
+    id : int
+    date_created : datetime
+ 
     class Config:
         orm_mode = True
     
     
 
-class UserOut(User):
+class UserOut(BaseModel):
     id : int
-    todos : List[TodoOut] = []
+    email : EmailStr
+    todos : List[UserTodoOut] = []
 
     class Config:
         orm_mode = True

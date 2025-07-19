@@ -19,6 +19,7 @@ def get_users(db:Session = Depends(database.get_db), current_user: models.User =
 def create_user(user:schemas.UserCreate, db : Session= Depends(database.get_db)):
 
     hashed_password = utils.hash_password(user.password)
+
     new_user = models.User(email=user.email , password = hashed_password)
 
     

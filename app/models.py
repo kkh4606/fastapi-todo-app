@@ -8,13 +8,15 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False, index=True)
-    todo = relationship("Todo", back_populates="user")
+    todos = relationship("Todo", back_populates="user")
 
 
 class Todo(Base):
     __tablename__ = "todos"
     id = Column(Integer, nullable=False, primary_key=True)
-    todo = Column(String, nullable=False, index=True)
+    todo = Column(String, nullable=False)
     is_completed = Column(Boolean, nullable=False, index=True)
     date_created = Column(DateTime(timezone=True), server_default=func.now())
     user_id = Column(Integer, ForeignKey("users.id"))
+
+    user = relationship('User', back_populates='todos')

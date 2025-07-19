@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from .. import schemas, database, models
+from .. import schemas, database, models, oauth2
 
 
 router = APIRouter(prefix="/todos", tags=["TODOS"])
@@ -23,9 +23,15 @@ def get_todo(id: int, db: Session = Depends(database.get_db)):
     return todo
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
-def add_todo(todo_data: schemas.AddTodo, db: Session = Depends(database.get_db)):
-    new_todo = models.Todo(**todo_data.model_dump())
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.TodoOut)
+def add_todo(todo_data: schemas.AddTodo, db: Session = Depends(database.get_db),
+             current_user : models.User = Depends(oauth2.get_current_user)):
+    
+
+   
+    
+    
+    new_todo = models.Todo(**todo_data.model_dump(), user_id = current_user.id)
     db.add(new_todo)
     db.commit()
     db.refresh(new_todo)

@@ -5,14 +5,14 @@ from fastapi import HTTPException, status, Depends
 from sqlalchemy.orm import Session
 from . import database, models, schemas
 
+from app.config import settings
 
 
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-oauth2_shemae = OAuth2PasswordBearer(tokenUrl='login')
+oauth2_sheme = OAuth2PasswordBearer(tokenUrl='login')
 
 
 # create jwt
@@ -44,7 +44,7 @@ def verify_access_token(token:str, credentials_exception):
 
 # get current user
 
-def get_current_user(token:str = Depends(oauth2_shemae), db:Session = Depends(database.get_db)):
+def get_current_user(token:str = Depends(oauth2_sheme), db:Session = Depends(database.get_db)):
     
     credentials_exceptions = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Could not validate credentaials', headers={"WWW-Authtenticate" : 'Bearer'})
 
